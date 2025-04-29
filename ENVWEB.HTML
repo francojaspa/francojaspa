@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClimateCare | Plant. Protect. Prosper.</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS will be placed here */
+        :root {
+            --day-green: #27AE60;
+            --night-green: #1E8449;
+            --day-bg: #AED6F1;
+            --night-bg: #2C3E50;
+            --earth-brown: #8D6E63;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background 0.5s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+            background: var(--day-bg);
+        }
+
+        /* Header Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            background: rgba(255,255,255,0.9);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--day-green);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            transform: rotate(180deg);
+            position: relative;
+        }
+
+        .logo-icon::after {
+            content: '♻️';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.7);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--day-green);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            background: var(--day-green);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #2C3E50;
+            z-index: 2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            z-index: 2;
+            color: #34495E;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            z-index: 2;
+        }
+
+        .secondary-button {
+            background: white;
+            color: var(--day-green);
+            border: 2px solid var(--day-green);
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .secondary-button:hover {
+            background: var(--day-green);
+            color: white;
+        }
+
+        /* 3D Forest Container */
+        .forest-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .tree {
+            position: absolute;
+            width: 100px;
+            height: 150px;
+            background: var(--day-green);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            transform-origin: 50% 100%;
+        }
+
+        /* Day/Night Toggle */
+        .toggle-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .toggle-switch {
+            width: 60px;
+            height: 30px;
+            background: #ddd;
+            border-radius: 30px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .toggle-switch::before {
+            content: '';
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--day-green);
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+
+        #dayNightToggle:checked + .toggle-switch::before {
+            transform: translateX(30px);
+            background: #F39C12;
+        }
+
+        /* Carbon Meter */
+        .carbon-meter {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 100;
+            max-width: 300px;
+        }
+
+        .meter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .meter-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .meter-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--day-green);
+        }
+
+        .meter-visual {
+            height: 10px;
+            background: #eee;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+
+        .meter-fill {
+            height: 100%;
+            width: 30%;
+            background: var(--day-green);
+            border-radius: 5px;
+        }
+
+        .meter-details {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Night Mode Styles */
+        body.night-mode {
+            background: var(--night-bg);
+            color: white;
+        }
+
+        .night-mode .hero h1,
+        .night-mode .hero p {
+            color: white;
+        }
+
+        .night-mode nav a {
+            color: #eee;
+        }
+
+        .night-mode .secondary-button {
+            color: white;
+            border-color: white;
+        }
+
+        .night-mode .secondary-button:hover {
+            background: white;
+            color: var(--night-green);
+        }
+
+        .night-mode .tree {
+            background: var(--night-green);
+        }
+
+        .night-mode .carbon-meter,
+        .night-mode .toggle-container {
+            background: #34495E;
+            color: white;
+        }
+
+        .night-mode .meter-title,
+        .night-mode .toggle-label {
+            color: white;
+        }
+
+        .night-mode .meter-value {
+            color: #F39C12;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .cta-button, .secondary-button {
+                width: 100%;
+            }
+
+            .carbon-meter {
+                left: 1rem;
+                right: 1rem;
+                bottom: 5rem;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <div class="logo-icon"></div>
+            <h1>ClimateCare</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Impact</a></li>
+                <li><a href="#">Team</a></li>
+            </ul>
+        </nav>
+        <button class="cta-button">Join Us</button>
+    </header>
+
+    <section class="hero">
+        <h1>GROW WITH US</h1>
+        <p>Plant trees, recycle more, breathe easier. Join our community to make a visible impact on our planet's future.</p>
+        <div class="hero-buttons">
+            <button class="cta-button">See Our Impact</button>
+            <button class="secondary-button">Register Now</button>
+        </div>
+        
+        <!-- 3D Forest Background -->
+        <div class="forest-container" id="forest">
+            <!-- Trees will be generated by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Day/Night Toggle -->
+    <div class="toggle-container">
+        <span class="toggle-label">Day</span>
+        <input type="checkbox" id="dayNightToggle" hidden>
+        <label for="dayNightToggle" class="toggle-switch"></label>
+        <span class="toggle-label">Night</span>
+    </div>
+
+    <!-- Carbon Offset Meter -->
+    <div class="carbon-meter">
+        <div class="meter-header">
+            <span class="meter-title">Carbon Offset</span>
+            <span class="meter-value">1,240 kg</span>
+        </div>
+        <div class="meter-visual">
+            <div class="meter-fill"></div>
+        </div>
+        <div class="meter-details">
+            Equivalent to 31 trees planted. Help us reach our 5,000 kg goal!
+        </div>
+    </div>
+
+    <script>
+        // Generate animated trees
+        document.addEventListener('DOMContentLoaded', function() {
+            const forest = document.getElementById('forest');
+            const treeCount = window.innerWidth > 768 ? 15 : 8;
+            
+            for (let i = 0; i < treeCount; i++) {
+                const tree = document.createElement('div');
+                tree.className = 'tree';
+                
+                // Random positioning
+                const left = Math.random() * 100;
+                const bottom = Math.random() * 30;
+                const scale = 0.5 + Math.random() * 0.7;
+                const rotation = -5 + Math.random() * 10;
+                
+                tree.style.left = `${left}%`;
+                tree.style.bottom = `${bottom}%`;
+                tree.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
+                tree.style.opacity = 0.7 + Math.random() * 0.3;
+                
+                forest.appendChild(tree);
+            }
+            
+            // Mouse move animation for trees
+            document.addEventListener('mousemove', (e) => {
+                const trees = document.querySelectorAll('.tree');
+                const mouseX = e.clientX / window.innerWidth;
+                const mouseY = e.clientY / window.innerHeight;
+                
+                trees.forEach((tree, index) => {
+                    const delay = index * 0.05;
+                    const rotation = 5 * (mouseX - 0.5) + 5 * (mouseY - 0.5);
+                    
+                    setTimeout(() => {
+                        tree.style.transform = `scale(${tree.style.transform.match(/scale\(([^)]+)\)/)[1]}) rotate(${rotation}deg)`;
+                    }, delay * 1000);
+                });
+            });
+            
+            // Day/Night toggle
+            const toggle = document.getElementById('dayNightToggle');
+            toggle.addEventListener('change', function() {
+                document.body.classList.toggle('night-mode');
+                
+                // Update meter color
+                const meterValue = document.querySelector('.meter-value');
+                const meterFill = document.querySelector('.meter-fill');
+                
+                if (this.checked) {
+                    meterValue.style.color = '#F39C12';
+                    meterFill.style.background = '#F39C12';
+                } else {
+                    meterValue.style.color = 'var(--day-green)';
+                    meterFill.style.background = 'var(--day-green)';
+                }
+            });
+            
+            // Animate carbon meter (demo)
+            setInterval(() => {
+                const fill = document.querySelector('.meter-fill');
+                const value = document.querySelector('.meter-value');
+                
+                const currentWidth = parseFloat(fill.style.width) || 30;
+                const newWidth = Math.min(currentWidth + 0.5, 100);
+                
+                fill.style.width = `${newWidth}%`;
+                value.textContent = `${Math.round(1240 * (newWidth / 30))} kg`;
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
